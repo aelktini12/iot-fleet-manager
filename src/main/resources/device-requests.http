@@ -1,0 +1,14 @@
+### 1. Lister tous les appareils (GET)
+GET http://localhost:8080/api/v1/devices
+Accept: application/json
+
+### 2. Créer un nouvel appareil (POST)
+POST http://localhost:8080/api/v1/devices
+Content-Type: application/json
+
+{
+  "serialNumber": "SN-A350-001",
+  "name": "Capteur Température Cabine",
+  "type": "SENSOR",
+  "status": "ONLINE"
+}
