@@ -42,4 +42,15 @@ public class GlobalExceptionHandler {
 
         return error;
     }
+
+    @ResponseStatus(HttpStatus.CONFLICT) // HTTP code 409
+    @ExceptionHandler(DeviceStateConflictException.class)
+    public Map <String, String> handleConflictExceptions(DeviceStateConflictException ex) {
+
+        Map<String, String> error = new HashMap<>();
+
+        error.put("error", ex.getMessage());
+
+        return error;
+    }
 }

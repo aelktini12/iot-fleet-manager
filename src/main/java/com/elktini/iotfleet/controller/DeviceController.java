@@ -38,6 +38,11 @@ public class DeviceController {
         return deviceService.getDeviceById(id);
     }
 
+    @GetMapping("/serial/{serialNumber}")
+    public Device getDeviceBySerialNumber(@PathVariable String serialNumber) {
+        return deviceService.getDeviceBySerialNumber(serialNumber);
+    }
+
     @PutMapping("/{id}")
     public Device updateDevice(@PathVariable Long id, @Valid @RequestBody Device device) {
         return deviceService.updateDevice(id, device);

@@ -1,6 +1,7 @@
 package com.elktini.iotfleet.service;
 
 import com.elktini.iotfleet.exception.ResourceNotFoundException;
+import com.elktini.iotfleet.exception.DeviceStateConflictException;
 import com.elktini.iotfleet.model.Device;
 import com.elktini.iotfleet.repository.DeviceRepository;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,11 @@ public class DeviceService {
                 .orElseThrow(() -> new ResourceNotFoundException("Device not found with ID: " + id));
     }
 
+    public Device getDeviceBySerialNumber(String serialNumber) {
+        return deviceRepository.findBySerialNumber(serialNumber)
+                .orElseThrow(() -> new ResourceNotFoundException("Device not found with serialNumber: " + serialNumber));
+    }
+
     // POST
     public Device createDevice(Device device) {
 
@@ -53,7 +59,11 @@ public class DeviceService {
 
     // DELETE
     public void deleteDevice(Long id) {
-        getDeviceById(id);
+        Device existingDevice = getDeviceById(id);
+
+        if ("ONLINE".equals(existingDevice.getStatus())) {
+            throw new DeviceStateConflictException("Unable to delete currently ONLINE device " + existingDevice.getSerialNumber() + " : Devices with ONLINE status cannot be removed");
+        }
         deviceRepository.deleteById(id);
     }
 }
