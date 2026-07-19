@@ -37,6 +37,9 @@ public class DeviceService {
     // POST
     public Device createDevice(Device device) {
 
+        if(deviceRepository.existsBySerialNumber(device.getSerialNumber())) {
+            throw new DeviceStateConflictException("Device already exists with serialNumber: " + device.getSerialNumber());
+        }
         // If no status is provided, it is set to OFFLINE by default
         if (device.getStatus() == null || device.getStatus().isEmpty()) {
             device.setStatus("OFFLINE");
